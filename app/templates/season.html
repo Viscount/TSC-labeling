@@ -1,0 +1,30 @@
+{% extends "common/base.html" %}<!--继承基础模板-->
+{% block content %}<!--自定义模板区域-->
+<div class="col-xs-12 col-sm-9">
+    <h1>{{ season.title }}</h1>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <td>Episode ID</td>
+                <td>Index</td>
+                <td>Title</td>
+                <td>Operation</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for episode in episodes %}
+                <tr>
+                    <td>{{ episode.episode_id }}</td>
+                    <td>{{ episode.index }}</td>
+                    <td>{{ episode.index_title }}</td>
+                    <td>
+                        <a href={{ url_for('episode.show_episode_danmakus', episode_id=episode.episode_id) }}>
+                            <button type="button" class="btn btn-primary">Detail</button>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div><!--/.col-xs-12.col-sm-9-->
+{% endblock %}
