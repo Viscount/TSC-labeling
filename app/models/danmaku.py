@@ -14,8 +14,8 @@ class Danmaku(db.Model):
     pool = db.Column(db.Integer, nullable=False)  # 弹幕池 0普通池 1字幕池 2特殊池 【目前特殊池为高级弹幕专用】
     sender_id = db.Column(db.String(16), nullable=False)  # 发送者的ID，用于“屏蔽此弹幕的发送者”功能
     content = db.Column(db.Text, nullable=False)  # 弹幕内容
-    block_level = db.Column(db.Integer, nullable=True) # 屏蔽等级
-    label = db.Column(db.Integer, nullable=True) # 主观评分
+    block_level = db.Column(db.Integer, nullable=True)  # 屏蔽等级
+    label = db.Column(db.Integer, nullable=True)    # 主观评分
     createdAt = db.Column(db.DateTime, nullable=True)
     updatedAt = db.Column(db.DateTime, nullable=True)
     # 外键

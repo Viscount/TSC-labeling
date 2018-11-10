@@ -6,6 +6,7 @@
             <tr>
                 <td>Season ID</td>
                 <td>Title</td>
+                <td>Episodes Num</td>
                 <td>Has_image?</td>
                 <td>Operation</td>
             </tr>
@@ -15,6 +16,7 @@
                 <tr>
                     <td>{{ season.season_id }}</td>
                     <td>{{ season.title }}</td>
+                    <td>{{ episode_counts[season.season_id] }}</td>
                     <td>
                         {% if has_img[season.season_id] %}
                             <span class="glyphicon glyphicon-ok" aria-hidden="true" style="color:#00FF00;"></span>
