@@ -10,40 +10,52 @@
         {% endfor %}
     </div>
     <div class="row" id="progress" style="margin-top: 10px; margin-bottom: 10px">
-        <div class="col-md-1">
-            {% if env_args['start'] <= 0 %}
-                <button type="button" class="btn btn-default btn-sm" disabled="disabled"><</button>
-            {% else %}
-            {% set start_= env_args['start'] - 1 %}
-            <a href="{{ url_for('episode.show_episode_danmakus', episode_id=episode.episode_id,
-            start=start_, context=env_args['context'], max_sec=env_args['max_sec']) }}">
-                <button type="button" class="btn btn-default btn-sm"><</button>
-            </a>
-            {% endif %}
-        </div>
         <div class="col-md-10">
-            <div class="progress" style="height: 30px; margin-bottom: 0px">
+            <div class="col-md-1">
+                {% if env_args['start'] <= 0 %}
+                <button type="button" class="btn btn-default btn-sm pull-right" disabled="disabled"><</button>
+                {% else %}
+                {% set start_= env_args['start'] - 1 %}
+                <a href="{{ url_for('episode.show_episode_danmakus', episode_id=episode.episode_id,
+                start=start_, context=env_args['context'], max_sec=env_args['max_sec']) }}">
+                    <button type="button" class="btn btn-default btn-sm"><</button>
+                </a>
+            {% endif %}
+            </div>
+            <div class="col-md-10">
+                <div class="progress" style="height: 30px; margin-bottom: 0px">
                 <div class="progress-bar" role="progressbar" aria-valuenow="{{ env_args['start'] }}"
                      aria-valuemin="0" aria-valuemax="{{ env_args['max_sec'] }}"
                      style="width: {{ env_args['start']/env_args['max_sec']*100 }}%; height: 30px; min-width: 5em;">
                     {{ env_args['start'] }} / {{ env_args['max_sec'] }}
                 </div>
             </div>
+            </div>
+            <div class="col-md-1">
+                {% if env_args['start'] >= env_args['max_sec'] %}
+                <button type="button" class="btn btn-default btn-sm pull-left" disabled="disabled">></button>
+                {% else %}
+                {% set start_= env_args['start'] + 1 %}
+                <a href="{{ url_for('episode.show_episode_danmakus', episode_id=episode.episode_id,
+                    start=start_, context=env_args['context'], max_sec=env_args['max_sec']) }}">
+                    <button type="button" class="btn btn-default btn-sm">></button>
+                </a>
+                {% endif %}
+            </div>
         </div>
-        <div class="col-md-1">
-            {% if env_args['start'] >= env_args['max_sec'] %}
-                <button type="button" class="btn btn-default btn-sm" disabled="disabled">></button>
-            {% else %}
-            {% set start_= env_args['start'] + 1 %}
-            <a href="{{ url_for('episode.show_episode_danmakus', episode_id=episode.episode_id,
-            start=start_, context=env_args['context'], max_sec=env_args['max_sec']) }}">
-                <button type="button" class="btn btn-default btn-sm">></button>
-            </a>
-            {% endif %}
+        <div class="col-md-2">
+            <form class="form-inline" action="{{ url_for('episode.show_episode_danmakus',
+                    episode_id=episode.episode_id) }}">
+                <input class="form-control" type="number" name="start" id="start" style="width: 70%">
+                <input class="hidden" type="number" name="context" value="{{ env_args['context'] }}">
+                <input class="hidden" type="number" name="max_sec" value="{{ env_args['max_sec'] }}">
+                <button type="submit" class="btn btn-default btn-primary pull-right">Go</button>
+            </form>
         </div>
     </div>
+    </div>
     <div class="row" id="text">
-        <form action="{{ url_for('episode.set_danmakus_label', episode_id=episode.episode_id,
+        <form action="{{ url_for('episode.set_danmakus_label', episode_id=episode.episode_id, page=env_args['page'],
                 start=env_args['start'], context=env_args['context'], max_sec=env_args['max_sec']) }}" method="POST">
             <table class="table table-hover">
             <thead>

@@ -26,14 +26,16 @@ def show_episode_danmakus(episode_id, page=1):
             env_args = {
                 'context': int(request.args.get('context')),
                 'start': int(request.args.get('start')),
-                'max_sec': int(request.args.get('max_sec'))
+                'max_sec': int(request.args.get('max_sec')),
+                'page': page
             }
         else:
             danmakus = Danmaku.query.filter_by(episode_id=episode_id).order_by(Danmaku.playback_time)
             env_args = {
                 'context': 5,
                 'start': 0,
-                'max_sec': math.ceil(danmakus[-1].playback_time)
+                'max_sec': math.ceil(danmakus[-1].playback_time),
+                'page': page
             }
         episode = Episode.query.filter_by(episode_id=episode_id).first()
         start = env_args['start']
@@ -57,7 +59,8 @@ def set_danmakus_label(episode_id):
         env_args = {
             'context': int(request.args.get('context')),
             'start': int(request.args.get('start')),
-            'max_sec': int(request.args.get('max_sec'))
+            'max_sec': int(request.args.get('max_sec')),
+            'page': int(request.args.get('page'))
         }
         form = request.form.to_dict()
         key_set = form.keys()
@@ -69,7 +72,7 @@ def set_danmakus_label(episode_id):
             else:
                 danmaku.label = int(form[raw_id])
         db.session.commit()
-        return redirect(url_for('episode.show_episode_danmakus', episode_id=episode_id,
+        return redirect(url_for('episode.show_episode_danmakus', episode_id=episode_id, page=env_args['page'],
             start=env_args['start'], context=env_args['context'], max_sec=env_args['max_sec']))
     except TemplateNotFound:
         abort(404)
