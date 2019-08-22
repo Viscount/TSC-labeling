@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, abort, jsonify
 from jinja2 import TemplateNotFound
+from sqlalchemy import and_
 from app.models.bangumi import Bangumi
 from app.models.episode import Episode
 from app.models.danmaku import Danmaku
@@ -35,11 +36,16 @@ def show_season_episodes(season_id):
         episodes = Episode.query.filter_by(season_id=season_id).all()
         danmaku_counts = dict()
         tot_danmaku = 0
+        labeled_danmaku = 0
         for episode in episodes:
             count = Danmaku.query.filter_by(episode_id=episode.episode_id).count()
             danmaku_counts[episode.episode_id] = count
             tot_danmaku += count
+
+            labeled_count = Danmaku.query.filter(and_(Danmaku.episode_id == episode.episode_id,
+                                                    Danmaku.block_level > 0)).count()
+            labeled_danmaku += labeled_count
         return render_template('season.html', season=season, episodes=episodes,
-                               danmaku_counts=danmaku_counts, tot_danmaku=tot_danmaku)
+                               danmaku_counts=danmaku_counts, tot_danmaku=tot_danmaku, labeled_danmaku=labeled_danmaku)
     except TemplateNotFound:
         abort(404)
